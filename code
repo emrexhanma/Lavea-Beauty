@@ -1,0 +1,686 @@
+import * as React from "react";
+import { addPropertyControls, ControlType } from "framer";
+
+type Props = {
+  phone: string;
+  whatsappUrl: string;
+  studioName: string;
+  city: string;
+};
+
+const bgGradient =
+  "radial-gradient(circle at top left, #fdf7ee 0, #f5f1ea 40%, #efe7db 100%)";
+
+const styles = {
+  page: {
+    width: "100%",
+    height: "100%",
+    minHeight: "100vh",
+    background: bgGradient,
+    fontFamily:
+      'system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif',
+    color: "#1f2933",
+    boxSizing: "border-box" as const,
+  },
+  shell: {
+    width: "100%",
+    maxWidth: 1120,
+    margin: "0 auto",
+    padding: "24px 20px 64px",
+    boxSizing: "border-box" as const,
+  },
+  nav: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: 16,
+    marginBottom: 32,
+    flexWrap: "wrap" as const,
+  },
+  logo: {
+    display: "flex",
+    alignItems: "center",
+    gap: 10,
+  },
+  logoMark: {
+    width: 32,
+    height: 32,
+    borderRadius: 999,
+    background: "linear-gradient(135deg, #d3b08a, #f5e5d4)",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: 18,
+    fontWeight: 600 as const,
+    color: "#fff",
+    boxShadow: "0 10px 25px rgba(148, 99, 55, 0.45)",
+  },
+  logoTextMain: {
+    fontWeight: 600 as const,
+    letterSpacing: "0.08em",
+    textTransform: "uppercase" as const,
+    fontSize: 12,
+  },
+  logoTextSub: {
+    fontSize: 11,
+    color: "#6b7280",
+  },
+  navCta: {
+    display: "flex",
+    alignItems: "center",
+    gap: 14,
+    fontSize: 13,
+    flexWrap: "wrap" as const,
+  },
+  navPhone: {
+    color: "#6b7280",
+  },
+  btnBase: {
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 999,
+    padding: "9px 18px",
+    fontSize: 13,
+    border: "1px solid transparent",
+    cursor: "pointer",
+    transition: "all 0.16s ease-out",
+    whiteSpace: "nowrap" as const,
+    textDecoration: "none",
+  },
+  btnPrimary: {
+    background: "linear-gradient(135deg, #1f2933, #111827)",
+    color: "#fdf7ee",
+    boxShadow: "0 12px 30px rgba(15, 23, 42, 0.4)",
+  },
+  btnGhost: {
+    background: "rgba(255, 255, 255, 0.6)",
+    borderColor: "rgba(31, 41, 51, 0.08)",
+    backdropFilter: "blur(10px)",
+    color: "#1f2933",
+  },
+  hero: {
+    display: "grid",
+    gridTemplateColumns: "minmax(0, 1.2fr) minmax(0, 1fr)",
+    gap: 32,
+    alignItems: "center",
+    marginBottom: 56,
+  },
+  heroLeft: {
+    display: "flex",
+    flexDirection: "column" as const,
+    gap: 18,
+  },
+  heroTag: {
+    display: "inline-flex",
+    alignItems: "center",
+    gap: 10,
+    fontSize: 11,
+    textTransform: "uppercase" as const,
+    letterSpacing: "0.16em",
+    color: "#6b7280",
+  },
+  heroTagDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 999,
+    background: "#c89f7b",
+  },
+  heroTitle: {
+    fontSize: 34,
+    lineHeight: 1.15,
+    letterSpacing: "0.02em",
+  },
+  heroTitleHighlight: {
+    background: "linear-gradient(135deg, #c89f7b, #915f36)",
+    WebkitBackgroundClip: "text",
+    color: "transparent",
+  },
+  heroSub: {
+    fontSize: 14,
+    color: "#6b7280",
+    maxWidth: 460,
+  },
+  heroBadges: {
+    display: "flex",
+    flexWrap: "wrap" as const,
+    gap: 10,
+    fontSize: 11,
+    color: "#6b7280",
+  },
+  badge: {
+    padding: "6px 10px",
+    borderRadius: 999,
+    border: "1px solid rgba(148, 99, 55, 0.16)",
+    background: "rgba(255, 255, 255, 0.8)",
+    backdropFilter: "blur(10px)",
+  },
+  heroActions: {
+    display: "flex",
+    flexWrap: "wrap" as const,
+    gap: 12,
+    alignItems: "center",
+    marginTop: 6,
+  },
+  heroNote: {
+    fontSize: 11,
+    color: "#6b7280",
+  },
+  heroRight: {
+    background: "rgba(255, 255, 255, 0.9)",
+    borderRadius: 28,
+    padding: 18,
+    boxShadow: "0 18px 45px rgba(15, 23, 42, 0.12)",
+    border: "1px solid rgba(222, 212, 196, 0.9)",
+    display: "flex",
+    flexDirection: "column" as const,
+    gap: 14,
+  },
+  heroPhoto: {
+    borderRadius: 22,
+    overflow: "hidden",
+    height: 220,
+    background: "radial-gradient(circle at top, #fbeee2, #d9bfa0)",
+    display: "flex",
+    alignItems: "flex-end",
+    justifyContent: "center",
+    position: "relative" as const,
+  },
+  heroPhotoPlaceholder: {
+    width: "82%",
+    height: "82%",
+    borderRadius: "999px 999px 0 0",
+    background: "linear-gradient(145deg, #fdf7f2, #e2c4aa)",
+    boxShadow: "0 26px 60px rgba(148, 99, 55, 0.55)",
+  },
+  heroFooter: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    gap: 10,
+    fontSize: 11,
+  },
+  heroMeta: {
+    display: "flex",
+    flexDirection: "column" as const,
+    gap: 2,
+  },
+  heroMetaLabel: {
+    color: "#6b7280",
+    textTransform: "uppercase" as const,
+    letterSpacing: "0.14em",
+    fontSize: 10,
+  },
+  heroMetaMain: {
+    fontWeight: 500 as const,
+  },
+  heroRating: {
+    display: "flex",
+    flexDirection: "column" as const,
+    alignItems: "flex-end",
+    gap: 2,
+  },
+  heroRatingStars: {
+    fontSize: 12,
+  },
+  heroRatingText: {
+    fontSize: 10,
+    color: "#6b7280",
+  },
+  section: {
+    marginTop: 40,
+    padding: "20px 18px",
+    borderRadius: 22,
+    background: "rgba(255, 255, 255, 0.78)",
+    border: "1px solid rgba(229, 223, 212, 0.9)",
+    boxShadow: "0 14px 40px rgba(15, 23, 42, 0.1)",
+  },
+  sectionHeader: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    gap: 12,
+    marginBottom: 16,
+    flexWrap: "wrap" as const,
+  },
+  sectionTitle: {
+    fontSize: 16,
+    letterSpacing: "0.12em",
+    textTransform: "uppercase" as const,
+  },
+  sectionSub: {
+    fontSize: 12,
+    color: "#6b7280",
+    maxWidth: 320,
+  },
+  grid: {
+    display: "grid",
+    gap: 14,
+  },
+  grid3: {
+    gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+  },
+  card: {
+    background: "#ffffff",
+    borderRadius: 14,
+    padding: 14,
+    border: "1px solid rgba(229, 223, 212, 0.85)",
+    fontSize: 12,
+  },
+  cardMuted: {
+    background: "#f8f3eb",
+  },
+  cardTitle: {
+    fontSize: 13,
+    fontWeight: 600 as const,
+    marginBottom: 4,
+  },
+  cardText: {
+    fontSize: 12,
+    color: "#6b7280",
+  },
+  chipRow: {
+    display: "flex",
+    flexWrap: "wrap" as const,
+    gap: 8,
+    marginTop: 8,
+  },
+  chip: {
+    fontSize: 11,
+    padding: "5px 9px",
+    borderRadius: 999,
+    background: "rgba(248, 243, 235, 0.9)",
+  },
+  pricingGrid: {
+    display: "grid",
+    gap: 14,
+    gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+  },
+  priceCard: {
+    borderRadius: 18,
+    padding: "16px 14px",
+    border: "1px solid rgba(229, 223, 212, 0.95)",
+    background: "#fdf9f4",
+    display: "flex",
+    flexDirection: "column" as const,
+    gap: 8,
+    fontSize: 12,
+  },
+  priceCardHighlight: {
+    background: "linear-gradient(135deg, #1f2933, #111827)",
+    color: "#fdf7ee",
+    borderColor: "transparent",
+    boxShadow: "0 18px 40px rgba(15, 23, 42, 0.55)",
+  },
+  priceLabel: {
+    fontSize: 11,
+    textTransform: "uppercase" as const,
+    letterSpacing: "0.16em",
+    color: "#6b7280",
+  },
+  priceName: {
+    fontSize: 14,
+    fontWeight: 600 as const,
+  },
+  priceValue: {
+    fontSize: 20,
+    fontWeight: 600 as const,
+    marginTop: 2,
+  },
+  priceNote: {
+    fontSize: 11,
+    color: "#6b7280",
+  },
+  priceList: {
+    marginTop: 6,
+    fontSize: 11,
+    listStyle: "none" as const,
+    paddingLeft: 0,
+  },
+  ctaSection: {
+    marginTop: 32,
+    padding: "18px 16px",
+    borderRadius: 22,
+    border: "1px solid rgba(31, 41, 51, 0.12)",
+    background:
+      "radial-gradient(circle at top left, #fdf5ec 0, #f2e4d3 40%, #f5f1ea 100%)",
+    display: "flex",
+    flexWrap: "wrap" as const,
+    gap: 14,
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  ctaMain: {
+    display: "flex",
+    flexDirection: "column" as const,
+    gap: 4,
+    maxWidth: 520,
+  },
+  ctaTitle: {
+    fontSize: 15,
+    fontWeight: 600 as const,
+  },
+  ctaSub: {
+    fontSize: 12,
+    color: "#6b7280",
+  },
+  footer: {
+    marginTop: 28,
+    fontSize: 11,
+    color: "#6b7280",
+    display: "flex",
+    justifyContent: "space-between",
+    gap: 12,
+    flexWrap: "wrap" as const,
+  },
+};
+
+const merge = (...objs: React.CSSProperties[]): React.CSSProperties =>
+  Object.assign({}, ...objs);
+
+export function StudioLaveaLanding(props: Props) {
+  const { phone, whatsappUrl, studioName, city } = props;
+
+  return (
+    <div style={styles.page}>
+      <div style={styles.shell}>
+        {/* Navigation */}
+        <header style={styles.nav}>
+          <div style={styles.logo}>
+            <div style={styles.logoMark}>
+              {studioName?.charAt(0) || "L"}
+            </div>
+            <div>
+              <div style={styles.logoTextMain}>{studioName}</div>
+              <div style={styles.logoTextSub}>Lash &amp; Beauty Studio</div>
+            </div>
+          </div>
+          <div style={styles.navCta}>
+            <div style={styles.navPhone}>
+              {city} • {phone}
+            </div>
+            <a href="#booking" style={merge(styles.btnBase, styles.btnGhost)}>
+              Preise &amp; Buchung
+            </a>
+            <a
+              href="#booking"
+              style={merge(styles.btnBase, styles.btnPrimary)}
+            >
+              Termin anfragen
+            </a>
+          </div>
+        </header>
+
+        {/* Hero */}
+        <section style={styles.hero}>
+          <div style={styles.heroLeft}>
+            <div style={styles.heroTag}>
+              <span style={styles.heroTagDot} />
+              Signature Lash Looks • Natürlich &amp; clean
+            </div>
+            <h1 style={styles.heroTitle}>
+              Dezente Wimpern,{" "}
+              <span style={styles.heroTitleHighlight}>maximaler Impact</span>.
+            </h1>
+            <p style={styles.heroSub}>
+              {studioName} steht für moderne, natürliche Lash &amp; Beauty Looks
+              in ruhiger Boutique-Atmosphäre. Klare Online-Buchung, keine
+              Wartezeiten, Looks, die im Alltag funktionieren.
+            </p>
+            <div style={styles.heroBadges}>
+              <div style={styles.badge}>Classic &amp; Light Volume</div>
+              <div style={styles.badge}>Natürlich – kein „Fake-Look“</div>
+              <div style={styles.badge}>Zentrale Lage in {city}</div>
+            </div>
+            <div style={styles.heroActions}>
+              <a
+                href="#booking"
+                style={merge(styles.btnBase, styles.btnPrimary)}
+              >
+                Jetzt Termin sichern
+              </a>
+              <a
+                href="#gallery"
+                style={merge(styles.btnBase, styles.btnGhost)}
+              >
+                Vorher-Nachher ansehen
+              </a>
+            </div>
+            <div style={styles.heroNote}>
+              Buchung in unter 60 Sekunden. Zahlung vor Ort oder per Karte.
+            </div>
+          </div>
+
+          <aside style={styles.heroRight}>
+            <div style={styles.heroPhoto}>
+              <div style={styles.heroPhotoPlaceholder} />
+            </div>
+            <div style={styles.heroFooter}>
+              <div style={styles.heroMeta}>
+                <div style={styles.heroMetaLabel}>Artist</div>
+                <div style={styles.heroMetaMain}>Emilia • {studioName}</div>
+                <div style={styles.heroMetaLabel}>
+                  Spezialisiert auf natürliche Sets
+                </div>
+              </div>
+              <div style={styles.heroRating}>
+                <div style={styles.heroRatingStars}>★★★★★</div>
+                <div style={styles.heroRatingText}>
+                  4.9 / 5 • 120+ Bewertungen
+                </div>
+              </div>
+            </div>
+          </aside>
+        </section>
+
+        {/* Leistungen */}
+        <section style={styles.section} id="services">
+          <div style={styles.sectionHeader}>
+            <div style={styles.sectionTitle}>Leistungen</div>
+            <p style={styles.sectionSub}>
+              Klare Packages, transparente Preise, Looks ohne Überraschungen.
+              Kundinnen wissen vorab genau, was sie bekommen.
+            </p>
+          </div>
+          <div style={{ ...styles.grid, ...styles.grid3 }}>
+            <div style={styles.card}>
+              <div style={styles.cardTitle}>Classic Lashes</div>
+              <p style={styles.cardText}>
+                Einzelwimpern für einen dezenten „your lashes but better“-Look.
+                Ideal für Alltag und Office.
+              </p>
+              <div style={styles.chipRow}>
+                <span style={styles.chip}>Natürlich</span>
+                <span style={styles.chip}>Alltagstauglich</span>
+                <span style={styles.chip}>ca. 90 Min</span>
+              </div>
+            </div>
+            <div style={{ ...styles.card, ...styles.cardMuted }}>
+              <div style={styles.cardTitle}>Light Volume</div>
+              <p style={styles.cardText}>
+                Feine Volumen-Looks mit Fokus auf Softness – mehr Dichte,
+                trotzdem leicht und fluffig.
+              </p>
+              <div style={styles.chipRow}>
+                <span style={styles.chip}>Soft Volume</span>
+                <span style={styles.chip}>Foto-Ready</span>
+                <span style={styles.chip}>ca. 120 Min</span>
+              </div>
+            </div>
+            <div style={styles.card}>
+              <div style={styles.cardTitle}>Brow Lift &amp; Kombi</div>
+              <p style={styles.cardText}>
+                Brow Lifting, Pflege und auf Wunsch Kombi mit deinem Lash-Termin
+                für einen Full-Face-Effekt.
+              </p>
+              <div style={styles.chipRow}>
+                <span style={styles.chip}>Brows &amp; Lashes</span>
+                <span style={styles.chip}>One Appointment</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Gallery */}
+        <section style={styles.section} id="gallery">
+          <div style={styles.sectionHeader}>
+            <div style={styles.sectionTitle}>Gallery</div>
+            <p style={styles.sectionSub}>
+              Echte Kundinnen, echte Ergebnisse. Dezente Transformationen statt
+              überladenem „Filter-Look“.
+            </p>
+          </div>
+          <div style={{ ...styles.grid, ...styles.grid3 }}>
+            <div style={styles.card}>
+              <div style={styles.cardTitle}>Everyday Classic</div>
+              <p style={styles.cardText}>
+                Dezente Verlängerung, ideal für Office &amp; Uni. Kein Mascara
+                mehr notwendig.
+              </p>
+            </div>
+            <div style={styles.card}>
+              <div style={styles.cardTitle}>Soft Volume</div>
+              <p style={styles.cardText}>
+                Mehr Dichte für Events, dennoch leicht zu tragen und natürlich
+                im Tageslicht.
+              </p>
+            </div>
+            <div style={styles.card}>
+              <div style={styles.cardTitle}>Brow &amp; Lash Kombi</div>
+              <p style={styles.cardText}>
+                Clean Brows und leichte Lashes – ready für Fotos, ohne
+                geschminkt zu wirken.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Preise & Buchung */}
+        <section style={styles.section} id="booking">
+          <div style={styles.sectionHeader}>
+            <div style={styles.sectionTitle}>Preise &amp; Buchung</div>
+            <p style={styles.sectionSub}>
+              Transparent, fair und klar strukturiert. Kundinnen wählen ihr Set
+              und buchen den Termin in wenigen Klicks.
+            </p>
+          </div>
+
+          <div style={styles.pricingGrid}>
+            <div style={styles.priceCard}>
+              <div style={styles.priceLabel}>Classic</div>
+              <div style={styles.priceName}>Classic Lashes</div>
+              <div style={styles.priceValue}>89 €</div>
+              <div style={styles.priceNote}>Refill ab 49 €</div>
+              <ul style={styles.priceList as React.CSSProperties}>
+                <li>Natürliches Set</li>
+                <li>Perfekt für Alltag &amp; Office</li>
+                <li>ca. 90 Min inkl. Beratung</li>
+              </ul>
+            </div>
+
+            <div style={{ ...styles.priceCard, ...styles.priceCardHighlight }}>
+              <div style={{ ...styles.priceLabel, color: "#f8f3ebde" }}>
+                Most booked
+              </div>
+              <div style={styles.priceName}>Light Volume</div>
+              <div style={styles.priceValue}>119 €</div>
+              <div style={{ ...styles.priceNote, color: "#f8f3ebd2" }}>
+                Refill ab 59 €
+              </div>
+              <ul style={styles.priceList as React.CSSProperties}>
+                <li>Mehr Dichte, trotzdem soft</li>
+                <li>Ideal für Fotos &amp; Events</li>
+                <li>ca. 120 Min inkl. Styling</li>
+              </ul>
+              <a
+                href="#booking-form"
+                style={merge(
+                  styles.btnBase,
+                  styles.btnGhost,
+                  { marginTop: 8, alignSelf: "flex-start" }
+                )}
+              >
+                Termin anfragen
+              </a>
+            </div>
+
+            <div style={styles.priceCard}>
+              <div style={styles.priceLabel}>Kombi</div>
+              <div style={styles.priceName}>Lash &amp; Brow</div>
+              <div style={styles.priceValue}>149 €</div>
+              <div style={styles.priceNote}>Bundle-Preis</div>
+              <ul style={styles.priceList as React.CSSProperties}>
+                <li>Lash Set + Brow Lift</li>
+                <li>Ein Termin, Full Look</li>
+                <li>ca. 150 Min inkl. Pflege-Tipps</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        {/* CTA */}
+        <section style={styles.ctaSection} id="booking-form">
+          <div style={styles.ctaMain}>
+            <div style={styles.ctaTitle}>
+              Bereit für deinen neuen Signature Look?
+            </div>
+            <div style={styles.ctaSub}>
+              Wunschtermin per WhatsApp schicken oder das Online-Formular
+              nutzen. Bestätigung erfolgt in der Regel innerhalb von 24 Stunden.
+            </div>
+          </div>
+          <div>
+            <a
+              href={whatsappUrl}
+              style={merge(styles.btnBase, styles.btnPrimary)}
+              target="_blank"
+              rel="noreferrer"
+            >
+              WhatsApp an {studioName}
+            </a>
+          </div>
+        </section>
+
+        {/* Footer */}
+        <footer style={styles.footer}>
+          <div>
+            © {studioName} · Lash &amp; Beauty {city}
+          </div>
+          <div>Impressum • Datenschutz • AGB</div>
+        </footer>
+      </div>
+    </div>
+  );
+}
+
+StudioLaveaLanding.defaultProps = {
+  phone: "+49 123 456 789",
+  whatsappUrl: "https://wa.me/49123456789",
+  studioName: "Studio Lavea",
+  city: "Berlin",
+};
+
+addPropertyControls(StudioLaveaLanding, {
+  studioName: {
+    type: ControlType.String,
+    title: "Studio Name",
+    defaultValue: "Studio Lavea",
+  },
+  city: {
+    type: ControlType.String,
+    title: "Stadt",
+    defaultValue: "Berlin",
+  },
+  phone: {
+    type: ControlType.String,
+    title: "Telefon",
+    defaultValue: "+49 123 456 789",
+  },
+  whatsappUrl: {
+    type: ControlType.String,
+    title: "WhatsApp URL",
+    defaultValue: "https://wa.me/49123456789",
+  },
+});
+
+export default StudioLaveaLanding;
